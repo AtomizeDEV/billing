@@ -1,0 +1,9 @@
+<Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}}>
+    <div class="modal-body-container">
+        <InputGroup @name="API Key" @value={{@options.paymentGateway.api_key}} @helpText="API Key for the payment gateway." />
+        <InputGroup @name="API Secret" @value={{@options.paymentGateway.api_secret}} @helpText="API Secret for the payment gateway." />
+        <InputGroup @name="Webhook Secret" @value={{@options.paymentGateway.webhook_secret}} @helpText="If webhook events are authenticated set the webhook secret here." />
+        <InputGroup @name="Callback URL" @value={{@options.paymentGateway.callback_url}} @helpText="URL to receive payment gateway webhook events." />
+        <InputGroup @name="Return URL" @value={{@options.paymentGateway.redirect_url}} @helpText="If payment gateway redirects to portal set where the payment gateway should send user after payment." />
+    </div>
+</Modal::Default>

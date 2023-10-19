@@ -1,0 +1,12 @@
+<Modal::Default @modalIsOpened={{@modalIsOpened}} @options={{@options}} @confirm={{@onConfirm}} @decline={{@onDecline}}>
+    <div class="modal-body-container">
+        <InputGroup @wrapperClass="mb-6" @name="Card Details" @helpText="Your credit card details, make sure to double check card number, CVC, and expiration date.">
+            <div class="form-input input-lg">
+                <StripeCard @options={{this.stripeElementOptions}} @onComplete={{@options.setStripeElement}} @onChange={{@options.validateInput}} @onError={{@options.invalidateInput}} />
+            </div>
+        </InputGroup>
+        <InputGroup>
+            <Checkbox @value={{@options.isDefault}} @label="Make default payment method" @onToggle={{fn (mut @options.isDefault)}} @disabled={{@options.isFirstPaymentMethod}} />
+        </InputGroup>
+    </div>
+</Modal::Default>

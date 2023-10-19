@@ -1,0 +1,20 @@
+<ContentPanel @title="Billing Settings" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
+    <InputGroup @name="Payment Gateway" @helpText="Select the payment gateway to use.">
+        <Select @options={{this.paymentGateways}} @value={{this.paymentGateway}} @onSelect={{this.setPaymentGateway}} @optionLabel="name" @placeholder="Select payment gateway" class="w-full" />
+        {{#if (and this.paymentGateway (not this.isDirty))}}
+            <div class="flex flex-row items-center justify-end pt-3">
+                <Button @type="default" @icon="cog" @text="Configure payment gateway" @size="xs" @onClick={{this.configurePaymentGateway}} />
+            </div>
+        {{/if}}
+    </InputGroup>
+    <InputGroup>
+        <Checkbox @value={{this.trialEnabled}} @label="Trials Enabled" @onToggle={{fn (mut this.trialEnabled)}} @helpText="Set if you would like to allow a free trial period when a new subscription is created." />
+    </InputGroup>
+    {{#if this.trialEnabled}}
+        <InputGroup @name="Trial Duration (Number of Days)" @value={{this.trialDuration}} @helpText="Set the number of days trial will last for new signups" @type="number" />
+    {{/if}}
+</ContentPanel>
+
+<div class="mt-3 flex items-center justify-end">
+    <Button @type="primary" @size="lg" @icon="save" @text="Save Changes" @onClick={{this.saveSettings}} @disabled={{this.isLoading}} @isLoading={{this.isLoading}} />
+</div>

@@ -1,0 +1,165 @@
+{{#if this.isLoadingOverview}}
+    <div class="flex flex-row justify-center items-center">
+        <Spinner class="mr-2i" />
+        <span class="dark:text-gray-100 test-sm">Loading...</span>
+    </div>
+{{/if}}
+
+<div class="h-full {{if this.isLoading 'pointer-events-none opacity-50'}}" {{increase-height-by 900}}>
+    {{#if this.overview.isTrialing}}
+        <div class="bg-yellow-50 rounded shadow-sm border-l-4 border-yellow-400 px-4 py-2 my-6">
+            <div class="flex items-center mb-1">
+                <div class="flex-shrink-0 flex items-center">
+                    <svg class="h-6 w-6 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-1 flex items-center">
+                    <span class="font-extrabold text-lg text-yellow-800">You are on a trial period.</span>
+                </div>
+            </div>
+            <div>
+                <p class="text-yellow-700 text-sm">You have {{this.trialDaysRemaining}} ({{format-date this.overview.trialEndsAt "MMM do"}}) remaining on trial.</p>
+                {{#if this.overview.isSubscribed}}
+                    <p class="text-yellow-700 text-sm">Once your trial period ends you will be billed ({{format-currency this.selectedPrice.tiers.firstObject.flat_amount "USD"}}/{{abbreviate-interval this.selectedPrice.recurring.interval}}). You can cancel anytime before being billed.</p>
+                {{/if}}
+            </div>
+        </div>
+    {{/if}}
+
+    <div class="flex justify-end mb-2">
+        <Button @icon="credit-card" @text="Add payment method" @onClick={{this.addPaymentMethod}} />
+    </div>
+    <ContentPanel @title="Payment Methods" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800" @wrapperClass="mb-5">
+        <div class="space-y-3">
+            {{#each this.paymentMethods as |paymentMethod|}}
+                <div class="flex items-center justify-between px-3 py-2 shadow-md rounded-md dark:bg-gray-900 border border-gray-200 dark:border-gray-900">
+                    <div class="flex items-center dark:text-gray-100">
+                        <FaIcon @icon="credit-card" @size="lg" class="mr-2" />
+                        <span class="mr-2">Card ending in {{paymentMethod.last4}}</span>
+                        {{#if paymentMethod.isDefault}}
+                            <div class="-mt-1">
+                                <Badge @status="success">Default</Badge>
+                            </div>
+                        {{/if}}
+                    </div>
+                    <div class="flex items-center">
+                        {{#if paymentMethod.isLoading}}
+                            <Spinner />
+                        {{/if}}
+                        {{#unless paymentMethod.isDefault}}
+                            <a href="javascript:;" class="mr-2" {{on "click" (fn this.makePaymentMethodDefault paymentMethod)}}>Make Default</a>
+                        {{/unless}}
+                        <a href="javascript:;" class="text-red-500 hover:text-red-400" {{on "click" (fn this.removePaymentMethod paymentMethod.id paymentMethod.isDefault)}}>Remove</a>
+                    </div>
+                </div>
+            {{else}}
+                <div class="flex flex-col items-center justify-center p-6">
+                    <h4 class="mb-4 dark:text-gray-100">No payment methods</h4>
+                    <Button @icon="credit-card" @text="Add a payment method" @onClick={{this.addPaymentMethod}} />
+                </div>
+            {{/each}}
+        </div>
+    </ContentPanel>
+
+    <ContentPanel @title="Manage Subscription" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
+        {{#if this.overview.isTrialing}}
+            <div class="bg-blue-50 rounded-lg shadow-sm border-l-4 border-blue-400 px-2 py-1 mb-4">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg class="h-6 w-6 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-1 flex items-center">
+                        <span class="text-sm text-blue-800">Your trial will end on <strong>{{format-date this.overview.trialEndsAt "MMM do"}}</strong></span>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
+
+        {{#if this.isNotSubscribed}}
+            <div class="bg-yellow-50 rounded-lg shadow-sm border-l-4 border-yellow-400 px-4 py-2 mb-6">
+                <div class="flex items-center mb-1">
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg class="h-6 w-6 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-1 flex items-center">
+                        <span class="font-extrabold text-lg text-yellow-800">You are currently not subscribed.</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-yellow-700 text-sm">Choose a plan to activate your subscription and gain access to {{t "app.name"}} services.</p>
+                    {{#if this.overview.isElgibleForTrial}}
+                        <p class="text-yellow-700 text-sm">You are elgible for a 14 day free trial, select a plan below to begin.</p>
+                    {{/if}}
+                </div>
+            </div>
+        {{/if}}
+
+        {{#if this.overview.isGracePeriod}}
+            <div class="bg-yellow-50 rounded-lg shadow-sm border-l-4 border-yellow-400 px-4 py-2 mb-6">
+                <div class="flex items-center mb-1">
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg class="h-6 w-6 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-1 flex items-center">
+                        <span class="font-extrabold text-lg text-yellow-800">You are on a grace period.</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-yellow-700 text-sm">Your subscription is scheduled to be canceled at the end of this billing cycle. You will not be charged again, but you can continue to use {{t "app.name"}} services until the grace period ends.</p>
+                </div>
+            </div>
+        {{/if}}
+
+        <div class="mb-4">
+            <div class="relative flex">
+                <div class="bg-blue-500 p-0.5 rounded-lg flex">
+                    <button type="button" class="{{if (eq this.selectedInterval "month") "bg-white border-blue-500 text-blue-700 hover:bg-blue-50" "border-transparent text-blue-200 hover:bg-blue-600"}} relative py-2 px-6 rounded-md shadow-sm text-base font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-700 focus:ring-white focus:z-10" {{on "click" (fn (mut this.selectedInterval) "month")}}>Monthly billing</button>
+                    <button type="button" class="{{if (eq this.selectedInterval "year") "bg-white border-blue-500 text-blue-700 hover:bg-blue-50" "border-transparent text-blue-200 hover:bg-blue-600"}} ml-0.5 relative py-2 px-6 border rounded-md text-base font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-700 focus:ring-white focus:z-10" {{on "click" (fn (mut this.selectedInterval) "year")}}>Yearly billing</button>
+                </div>
+            </div>
+        </div>
+
+        <ul class="space-y-4 mb-6" role="radiogroup" aria-labelledby="radiogroup-label">
+            {{#each this.priceOptions as |price index|}}
+                <li {{on "click" (fn this.setPriceOption price)}} id="radiogroup-option-{{index}}" tabindex={{mult index -1}} role="radio" aria-checked={{eq this.selectedPrice.id price.id}} class="group relative bg-white dark:bg-gray-900 dark:border-gray-900 rounded-lg shadow-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-500 {{if price.isDisabled 'opacity-50 cursor-not-allowed pointer-events-none'}} {{if (eq this.selectedPrice.id price.id) 'active'}}">
+                    <div role="presentation" class="rounded-lg border border-gray-200 {{if (eq this.selectedPrice.id price.id) "dark:border-blue-400 dark:bg-blue-500 bg-white" "dark:border-gray-900 dark:bg-gray-900 bg-white"}}  bg-white px-6 py-4 sm:flex sm:justify-between">
+                        <div class="flex flex-col text-base">
+                            <p class="whitespace-nowrap text-lg font-extrabold text-gray-700 dark:text-white mb-2">
+                                {{price.nickname}}
+                            </p>
+                            <div class="text-gray-500 dark:text-gray-50">
+                                <p class="sm:inline">{{stripe-price-included price}}</p>
+                                <span class="hidden sm:inline sm:mx-1" aria-hidden="true">&middot;</span>
+                                <p class="sm:inline">{{stripe-price-additional price}}</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-row text-base sm:mt-0 sm:block sm:ml-4 sm:text-right">
+                            <span class="font-medium dark:text-white text-gray-900">{{format-currency price.tiers.firstObject.flat_amount price.currency}}</span>
+                            <span class="dark:text-gray-300 text-gray-500">/{{abbreviate-interval price.recurring.interval}}</span>
+                        </div>
+                    </div>
+                    <div class="{{if (eq this.selectedPrice.id price.id) "border-sky-500" "border-transparent"}} absolute inset-0 rounded-lg border-2 pointer-events-none" aria-hidden="true">
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </ContentPanel>
+
+    <div class="mt-3 flex items-center justify-end">
+        {{#if this.isNotSubscribed}}
+            <Button class="truncate" @type="primary" @icon="check" @iconPrefix="fas" @size="lg" @text="Subscribe Now" @onClick={{this.createNewSubscription}} @disabled={{not this.selectedPrice}} @isLoading={{this.isLoading}} />
+        {{else if this.overview.isGracePeriod}}
+            <Button class="truncate" @type="primary" @icon="repeat-alt" @size="lg" @text="Resume Subscription" @onClick={{this.resumeSubscription}} @isLoading={{this.isLoading}} />
+        {{else}}
+            <Button @wrapperClass="w-full md:w-auto" class="mr-2 mb-3 md:mb-0 truncate w-full md:w-auto" @type="primary" @icon="check" @size="lg" @iconPrefix="fas" @text="Update Subscription" @onClick={{this.updateSubscription}} @isLoading={{this.isLoading}} @disabled={{this.swapDisabled}} />
+            <Button @wrapperClass="w-full md:w-auto" class="truncate w-full md:w-auto" @type="danger" @icon="exclamation-triangle" @size="lg" @text="Cancel Subscription" @onClick={{this.cancelSubscription}} @isLoading={{this.icCanceling}} />
+        {{/if}}
+    </div>
+</div>

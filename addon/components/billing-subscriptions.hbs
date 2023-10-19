@@ -1,0 +1,65 @@
+<ContentPanel @title="Billing Subscriptions" @open={{true}} @pad={{true}} @panelBodyClass="bg-white dark:bg-gray-800">
+    <div class="flex flex-col space-y-4">
+        {{#if this.isLoading}}
+            <div class="flex flex-row justify-center items-center">
+                <Spinner class="mr-2i" />
+                <span class="dark:text-gray-100 test-sm">Loading subscriptions...</span>
+            </div>
+        {{/if}}
+        {{#each this.billables as |company|}}
+            <div class="rounded-lg shadow-md border border-black">
+                <div class="flex flex-row items-center justify-between py-2 px-4 rounded-t-lg dark:bg-gray-900">
+                    <div>
+                        <h3 class="font-bold test-base">{{company.name}}</h3>
+                        <span class="text-sm">Member since {{format-date company.created_at}}</span>
+                    </div>
+                    <div></div>
+                </div>
+                <div>
+                    <div class="border-t dark:border-gray-900 border-gray-300">
+                        {{#each company.subscriptions as |subscription|}}
+                            <div>
+                                <a href="javascript:;" class="dark:hover:bg-gray-500 hover:bg-gray-100" {{on "click" (fn (toggle "expanded" subscription))}}>
+                                    <div class="py-2 px-4 flex flex-row items-start justify-between">
+                                        <div>
+                                            <div class="flex items-center">
+                                                <FaIcon @icon="receipt" class="mr-1.5" />
+                                                <span class="font-semibold">{{subscription.data.plan}}</span>
+                                            </div>
+                                            <div class="mt-1 text-xs">{{format-currency subscription.data.amount subscription.data.currency}} {{subscription.data.interval}}</div>
+                                        </div>
+                                        <div class="flex flex-1 flex-row justify-end space-x-1">
+                                            <Badge @status={{subscription.data.status}} />
+                                            {{#if subscription.data.is_on_grace_period}}
+                                                <Badge @status="warning" @helpText={{concat "This subscription is pending cancellation, and will end on " (format-date subscription.ends_at)}}>On grace period</Badge>
+                                            {{/if}}
+                                            {{#if subscription.data.is_on_trial}}
+                                                <Badge @status="warning">On trial until {{format-date subscription.data.trial_ends_at "MMM do"}}</Badge>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                    <div class="px-4 pb-2 flex">
+                                        <div class="text-blue-600 bg-blue-100 border rounded-lg border-blue-600 shadow-sm px-2 text-sm">
+                                            {{if subscription.expanded "Click to hide details" "Click to view more details"}}
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="pt-2 pb-4 px-4 text-sm space-y-1 border-t border-dashed dark:border-gray-900 border-gray-300 {{if subscription.expanded 'flex flex-col' 'hidden'}}">
+                                    <div><span class="font-semibold">Interval:</span> <span class="dark:text-gray-300">{{subscription.data.interval}}</span></div>
+                                    <div><span class="font-semibold">Current Period:</span> <span class="dark:text-gray-300">{{subscription.data.current_period_start}} - {{subscription.data.current_period_end}}</span></div>
+                                    <div><span class="font-semibold">Amount:</span> <span class="dark:text-gray-300">{{subscription.data.amount}}</span></div>
+                                    <div><span class="font-semibold">Currency:</span> <span class="dark:text-gray-300">{{subscription.data.currency}}</span></div>
+                                    <div><span class="font-semibold">Collection Method:</span> <span class="dark:text-gray-300">{{subscription.data.collection_method}}</span></div>
+                                    <div><span class="font-semibold">Created:</span> <span class="dark:text-gray-300">{{subscription.data.created}}</span></div>
+                                    <div><span class="font-semibold">Subscription ID:</span> <span class="dark:text-gray-300">{{subscription.data.id}}</span></div>
+                                    <div><span class="font-semibold">Plan ID:</span> <span class="dark:text-gray-300">{{subscription.data.plan_id}}</span></div>
+                                    <div><span class="font-semibold">Plan Product ID:</span> <span class="dark:text-gray-300">{{subscription.data.plan_product_id}}</span></div>
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</ContentPanel>
