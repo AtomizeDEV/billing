@@ -1,1 +1,1 @@
-export { default } from '@fleetbase/billing-engine/adapters/billing';
+export { default } from '@atomizedev/billing-engine/adapters/billing';

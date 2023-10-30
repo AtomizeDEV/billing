@@ -1,1 +1,1 @@
-export { default } from '@fleetbase/billing-engine/serializers/payment-gateway';
+export { default } from '@atomizedev/billing-engine/serializers/payment-gateway';

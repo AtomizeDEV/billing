@@ -2,7 +2,7 @@ import Engine from '@ember/engine';
 import loadInitializers from 'ember-load-initializers';
 import Resolver from 'ember-resolver';
 import config from './config/environment';
-import services from '@fleetbase/ember-core/exports/services';
+import services from '@atomizedev/ember-core/exports/services';
 import BillingSettingsComponent from './components/billing-settings';
 import BillingPlansComponent from './components/billing-plans';
 import BillingSubscriptionsComponent from './components/billing-subscriptions';
@@ -26,7 +26,12 @@ export default class BillingEngine extends Engine {
             slug: 'billing',
             component: BillingSubscriptionManagementComponent,
             onClick: (menuItem) => {
-                return universe.transitionMenuItem('console.settings.virtual', menuItem);
+                // Provide the necessary context for the dynamic segments here
+                const context = {
+                    dynamicSegment1: 'value1',
+                    dynamicSegment2: 'value2',
+                };
+                return universe.transitionMenuItem('console.settings.virtual', menuItem, context);
             },
         });
 

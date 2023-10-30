@@ -4,10 +4,10 @@ dependencies:
   '@adopted-ember-addons/ember-stripe-elements':
     specifier: ^2.0.4
     version: 2.0.4
-  '@fleetbase/ember-core':
+  '@atomizedev/ember-core':
     specifier: ^0.1.4
     version: 0.1.4(@babel/core@7.23.0)(ember-fetch@8.1.2)(postcss@8.4.31)(webpack@5.74.0)
-  '@fleetbase/ember-ui':
+  '@atomizedev/ember-ui':
     specifier: ^0.2.0
     version: 0.2.0(@babel/core@7.23.0)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(postcss@8.4.31)(rollup@4.0.2)(webpack@5.74.0)
   '@fortawesome/ember-fontawesome':
@@ -2218,7 +2218,7 @@ packages:
       - supports-color
     dev: true
 
-  /@fleetbase/ember-core@0.1.4(@babel/core@7.23.0)(ember-fetch@8.1.2)(postcss@8.4.31)(webpack@5.74.0):
+  /@atomizedev/ember-core@0.1.4(@babel/core@7.23.0)(ember-fetch@8.1.2)(postcss@8.4.31)(webpack@5.74.0):
     resolution: {integrity: sha512-lQLjdLbQGcW5d1+n3zzy2UKpxpqCaa40F6i3JGO9vShZsDzoZermb1QjR0x9zaNAQP154ebhDfs8cDQLC8qr+g==}
     engines: {node: 14.* || >= 16}
     dependencies:
@@ -2250,7 +2250,7 @@ packages:
       - webpack
     dev: false
 
-  /@fleetbase/ember-ui@0.2.0(@babel/core@7.23.0)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(postcss@8.4.31)(rollup@4.0.2)(webpack@5.74.0):
+  /@atomizedev/ember-ui@0.2.0(@babel/core@7.23.0)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(postcss@8.4.31)(rollup@4.0.2)(webpack@5.74.0):
     resolution: {integrity: sha512-c9PETFoMO3e5DS3vg7S0ZWlkLxDic09EY78WGyzTmg3l2EHB1uHn2HBo7GPWlLAPN2M6GZnVAXo5irTX76XZ4Q==}
     engines: {node: 14.* || >= 16}
     dependencies:

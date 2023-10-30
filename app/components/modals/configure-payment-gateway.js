@@ -1,1 +1,1 @@
-export { default } from '@fleetbase/billing-engine/components/modals/configure-payment-gateway';
+export { default } from '@atomizedev/billing-engine/components/modals/configure-payment-gateway';

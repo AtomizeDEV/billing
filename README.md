@@ -66,7 +66,7 @@ composer require fleetbase/billing
 Install the Ember.js Engine/Addon:
 
 ```bash
-pnpm install @fleetbase/billing
+pnpm install @atomizedev/billing
 ```
 
 ## Usage

@@ -1,1 +1,1 @@
-export { default } from '@fleetbase/billing-engine/services/stripev3';
+export { default } from '@atomizedev/billing-engine/services/stripev3';

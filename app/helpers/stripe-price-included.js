@@ -1,1 +1,1 @@
-export { default } from '@fleetbase/billing-engine/helpers/stripe-price-included';
+export { default } from '@atomizedev/billing-engine/helpers/stripe-price-included';

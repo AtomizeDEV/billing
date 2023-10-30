@@ -1,1 +1,1 @@
-export { default } from '@fleetbase/billing-engine/helpers/abbreviate-interval';
+export { default } from '@atomizedev/billing-engine/helpers/abbreviate-interval';
