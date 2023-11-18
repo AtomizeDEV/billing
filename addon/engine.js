@@ -24,14 +24,12 @@ export default class BillingEngine extends Engine {
             icon: 'credit-card',
             index: 3,
             slug: 'billing',
+            view: 'index',
             component: BillingSubscriptionManagementComponent,
             onClick: (menuItem) => {
-                // Provide the necessary context for the dynamic segments here
-                const context = {
-                    dynamicSegment1: 'value1',
-                    dynamicSegment2: 'value2',
-                };
-                return universe.transitionMenuItem('console.settings.virtual', menuItem, context);
+                const router = app.lookup('router:main');
+                return router.transitionTo('console.settings.virtual', 'billing', 'index');
+                // return universe.transitionMenuItem('console.settings.virtual', menuItem);
             },
         });
 
