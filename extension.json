@@ -2,7 +2,7 @@
     "name": "Billing",
     "version": "0.0.4",
     "description": "Multi-Tenant Billing and Subscriptions Extension for Fleetbase",
-    "repository": "https://github.com/fleetbase/billing",
+    "repository": "https://github.com/atomizedev/billing",
     "license": "MIT",
     "author": "Fleetbase Pte Ltd <hello@fleetbase.io>",
     "engine": "package.json",
