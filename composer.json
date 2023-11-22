@@ -1,5 +1,5 @@
 {
-    "name": "fleetbase/billing-api",
+    "name": "atomizedev/billing-api",
     "version": "0.0.4",
     "description": "Multi-Tenant Billing and Subscriptions Extension for Fleetbase",
     "keywords": [
