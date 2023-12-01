@@ -34,8 +34,8 @@
         "publish:github": "npm config set '@fleetbase:registry' https://npm.pkg.github.com/ && npm publish --access restricted"
     },
     "dependencies": {
-        "@atomizedev/ember-core": "^0.1.8",
-        "@atomizedev/ember-ui": "^0.2.5",
+        "@atomizedev/ember-core": "git@github.com/AtomizeDEV/ember-core.git",
+        "@atomizedev/ember-ui": "git@github.com/AtomizeDEV/ember-ui.git",
         "@adopted-ember-addons/ember-stripe-elements": "^2.0.4",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",

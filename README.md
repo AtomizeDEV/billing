@@ -1,6 +1,6 @@
 <p align="center">
     <p align="center">
-        <img src="https://github.com/fleetbase/billing/assets/816371/85d0a69f-d3d1-4c15-a6f9-a029c1e4f372" width="280" height="280" />
+        <img src="https://github.com/atomizedev/billing/assets/816371/85d0a69f-d3d1-4c15-a6f9-a029c1e4f372" width="280" height="280" />
     </p>
     <p align="center">
         Multi-Tenant Billing and Subscriptions Extension for Fleetbase
