@@ -23,7 +23,7 @@ Route::prefix(config('billing.api.routing.prefix', 'billing'))->namespace('Fleet
         | These are only for payment gateway webhooks.
         */
         $router->prefix('v1/receiver')->group(function ($router) {
-            $router->post('stripe', 'CallbackController@stripe');
+            $router->any('stripe', 'CallbackController@stripe');
         });
 
         /*

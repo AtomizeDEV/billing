@@ -26,10 +26,9 @@ export default class BillingEngine extends Engine {
             slug: 'billing',
             view: 'index',
             component: BillingSubscriptionManagementComponent,
-            onClick: (menuItem) => {
-                const router = app.lookup('router:main');
+            onClick: () => {
+                const router = app.lookup('service:router');
                 return router.transitionTo('console.settings.virtual', 'billing', 'index');
-                // return universe.transitionMenuItem('console.settings.virtual', menuItem);
             },
         });
 

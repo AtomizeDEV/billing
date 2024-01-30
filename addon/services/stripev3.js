@@ -1,12 +1,15 @@
-import Service from '@adopted-ember-addons/ember-stripe-elements/services/stripev3';
+import EmberStripeService from '@adopted-ember-addons/ember-stripe-elements/services/stripev3';
+import Service from '@ember/service';
 import PaymentGatewayModel from '../models/payment-gateway';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import { computed, get } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { assert } from '@ember/debug';
+import config from 'ember-get-config';
+import fetch from 'fetch';
 
-export default class StripeService extends Service {
+export default class StripeService extends EmberStripeService {
     @service store;
     @tracked stripeGateway;
     @tracked publishableKey;
@@ -35,7 +38,17 @@ export default class StripeService extends Service {
             return window.stripeInstance;
         }
 
-        const stripeGateway = await this.loadStripeGateway();
+        let stripeGateway;
+
+        if (this.store instanceof Service) {
+            stripeGateway = await this.loadStripeGateway();
+        } else {
+            stripeGateway = await this.loadStripeGatewayUsingFetch();
+        }
+
+        if (isBlank(stripeGateway) || stripeGateway.api_key === null) {
+            return;
+        }
 
         this.stripeGateway = stripeGateway;
         this.publishableKey = stripeGateway.api_key;
@@ -79,30 +92,90 @@ export default class StripeService extends Service {
         }
 
         // attempt to load from store
-        paymentGateway = this.store.peekAll('payment-gateway').find((gateway) => {
-            return gateway.code === 'stripe';
-        });
+        try {
+            paymentGateway = this.store.peekAll('payment-gateway').find((gateway) => {
+                return gateway.code === 'stripe';
+            });
+        } catch (error) {
+            // do nothing
+        }
 
         return paymentGateway;
     }
 
     loadStripeGateway() {
         return new Promise((resolve) => {
-            let paymentGateway = this.getStripeGateway();
+            let paymentGateway;
+
+            paymentGateway = this.getStripeGateway();
 
             if (paymentGateway) {
                 return resolve(paymentGateway);
             }
 
-            return this.store
-                .queryRecord('payment-gateway', { code: 'stripe', single: true })
-                .then((paymentGateway) => {
-                    resolve(paymentGateway);
-                })
-                .catch(() => {
-                    resolve(paymentGateway);
-                });
+            try {
+                return this.store
+                    .queryRecord('payment-gateway', { code: 'stripe', single: true })
+                    .then((paymentGateway) => {
+                        resolve(paymentGateway);
+                    })
+                    .catch(() => {
+                        resolve(paymentGateway);
+                    });
+            } catch (error) {
+                throw new Error('Unable to load payment gateway using the store service.');
+            }
         });
+    }
+
+    /**
+     * During app instance initialization the store or fetch
+     * service might not be initialized, load using fetch for a dependable initialization
+     *
+     * @memberof StripeService
+     */
+    loadStripeGatewayUsingFetch() {
+        let host = get(config, 'API.host');
+        let url = `${host}/billing/int/v1/payment-gateways?code=stripe&single=true`;
+
+        return new Promise((resolve) => {
+            return fetch(url, {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${this._getAuthenticationToken()}`,
+                },
+            }).then((response) => {
+                if (response.ok) {
+                    return response.json().then((json) => {
+                        const { paymentGateway } = json;
+
+                        if (paymentGateway) {
+                            resolve(paymentGateway);
+                        } else {
+                            resolve(null);
+                        }
+                    });
+                }
+
+                resolve(null);
+            });
+        });
+    }
+
+    _getAuthenticationToken() {
+        const localStorageSession = JSON.parse(window.localStorage.getItem('ember_simple_auth-session'));
+
+        if (localStorageSession) {
+            let { authenticated } = localStorageSession;
+            let token = authenticated.token;
+
+            return token;
+        }
+
+        return null;
     }
 
     isPaymentGateway(paymentGateway) {

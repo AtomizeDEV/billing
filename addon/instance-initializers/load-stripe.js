@@ -23,11 +23,10 @@ export function initialize(owner) {
             return;
         }
 
-        // create stripe instance now for stripe service
         const stripeService = owner.lookup('service:stripev3');
 
         if (stripeService) {
-            stripeService.loadStripeGateway();
+            stripeService.loadStripeGatewayUsingFetch();
         }
     });
 }

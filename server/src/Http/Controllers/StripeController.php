@@ -458,7 +458,18 @@ class StripeController extends Controller
         $company->load('owner');
 
         // we need to create as a customer within stripe
-        $owner = $company->owner ?? null;
+        $owner = $company->owner;
+
+        // use the first company user created as owner, also update as company owner
+        if (!$owner) {
+            $owner = $company->users()->first();
+            
+            if ($owner) {
+                // update company
+                $company->owner_uuid = $owner->uuid;
+                $company->save();
+            }
+        }
 
         // if no email must skip and notify user to provide email address
         if (!$owner) {

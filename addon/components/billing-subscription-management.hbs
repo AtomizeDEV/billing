@@ -21,7 +21,9 @@
             <div>
                 <p class="text-yellow-700 text-sm">You have {{this.trialDaysRemaining}} ({{format-date this.overview.trialEndsAt "MMM do"}}) remaining on trial.</p>
                 {{#if this.overview.isSubscribed}}
-                    <p class="text-yellow-700 text-sm">Once your trial period ends you will be billed ({{format-currency this.selectedPrice.tiers.firstObject.flat_amount "USD"}}/{{abbreviate-interval this.selectedPrice.recurring.interval}}). You can cancel anytime before being billed.</p>
+                    {{#let (get this.selectedPrice.tiers 0) as |selectedTier|}}
+                        <p class="text-yellow-700 text-sm">Once your trial period ends you will be billed ({{format-currency selectedTier.flat_amount "USD"}}/{{abbreviate-interval this.selectedPrice.recurring.interval}}). You can cancel anytime before being billed.</p>
+                    {{/let}}
                 {{/if}}
             </div>
         </div>
@@ -141,7 +143,9 @@
                             </div>
                         </div>
                         <div class="flex flex-row text-base sm:mt-0 sm:block sm:ml-4 sm:text-right">
-                            <span class="font-medium dark:text-white text-gray-900">{{format-currency price.tiers.firstObject.flat_amount price.currency}}</span>
+                            {{#let (get price.tiers '0') as |priceTier|}}
+                                <span class="font-medium dark:text-white text-gray-900">{{format-currency priceTier.flat_amount price.currency}}</span>
+                            {{/let}}
                             <span class="dark:text-gray-300 text-gray-500">/{{abbreviate-interval price.recurring.interval}}</span>
                         </div>
                     </div>
