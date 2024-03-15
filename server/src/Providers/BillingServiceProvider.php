@@ -56,8 +56,6 @@ class BillingServiceProvider extends CoreServiceProvider
      */
     public function boot()
     {
-        \Laravel\Cashier\Cashier::ignoreMigrations();
-
         $this->registerObservers();
         $this->registerExpansionsFrom(__DIR__ . '/../Expansions');
         $this->loadRoutesFrom(__DIR__ . '/../routes.php');
