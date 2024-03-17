@@ -44,7 +44,7 @@ class Subscription extends CashierSubscription
      *
      * @var array
      */
-    protected $searchableColumns = ['name'];
+    protected $searchableColumns = ['type'];
 
     /**
      * The attributes that are mass assignable.
@@ -54,7 +54,7 @@ class Subscription extends CashierSubscription
     protected $fillable = [
         'company_uuid',
         'payment_gateway_uuid',
-        'name',
+        'type',
         'payment_gateway_id', // -> stripe_id
         'payment_gateway_status', // -> stripe_status
         'payment_gateway_price', // -> stripe_product
